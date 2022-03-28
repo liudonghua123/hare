@@ -31,8 +31,17 @@ export type instant = struct { sec: i64, nsec: i64 };
 
 // The return value is negative if a < b, zero if a == b, and positive if a > b.
 export fn compare(a: instant, b: instant) int = {
-	return if (a.sec < b.sec) -1 else if (a.sec > b.sec) 1 else
-		if (a.nsec < b.nsec) -1 else if (a.nsec > b.nsec) 1 else 0;
+	if (a.sec < b.sec) {
+		return -1;
+	} else if (a.sec > b.sec) {
+		return 1;
+	} else if (a.nsec < b.nsec) {
+		return -1;
+	} else if (a.nsec > b.sec) {
+		return 1;
+	} else {
+		return 0;
+	};
 };
 
 // Converts the given [[instant]] to a Unix timestamp.
