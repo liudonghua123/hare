@@ -30,6 +30,10 @@ hare_srcs=\
 	./cmd/hare/schedule.ha \
 	./cmd/hare/subcmds.ha
 
+hare2_srcs=\
+	./cmd/hare2/main.ha \
+	./cmd/hare2/subcmds.ha
+
 harec_srcs=\
 	./cmd/harec/main.ha \
 	./cmd/harec/errors.ha
@@ -71,6 +75,11 @@ $(TESTCACHE)/hare.ssa: $(hare_srcs) $(testlib_deps_any) $(testlib_deps_$(PLATFOR
 	@$(LD) -T $(rtscript) -o $@ \
 		$(TESTCACHE)/hare.o $(testlib_deps_any) $(testlib_deps_$(PLATFORM))
 
+.bin/hare2: .bin/hare $(hare2_srcs)
+	@mkdir -p .bin
+	@printf 'HARE\t$@\n'
+	@env HAREPATH=. ./.bin/hare build -o .bin/hare2 ./cmd/hare2
+
 .bin/harec2: .bin/hare $(harec_srcs)
 	@mkdir -p .bin
 	@printf 'HARE\t$@\n'
@@ -94,7 +103,7 @@ clean:
 check: .bin/hare-tests
 	@./.bin/hare-tests
 
-all: .bin/hare .bin/harec2 .bin/haredoc
+all: .bin/hare .bin/hare2 .bin/harec2 .bin/haredoc
 
 install: all docs
 	mkdir -p $(DESTDIR)$(BINDIR) $(DESTDIR)$(MANDIR)/man1 \
